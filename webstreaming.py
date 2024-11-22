@@ -51,27 +51,6 @@ app = Flask(__name__)
 def index():
 	# return the rendered template
 	return render_template("index.html")
-'''
-def loopframe():
-    # loop over frames from the video stream
-    while True:
-    		# read the next frame from the video stream, resize it,
-    		# convert the frame to grayscale, and blur it
-        frame = vs.read()
-        frame = imutils.resize(frame, width=400)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (7, 7), 0)
-    	# grab the current timestamp and draw it on the frame
-        timestamp = datetime.datetime.now()
-        cv2.putText(frame, timestamp.strftime(
-    		"%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
-    		cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-    
-        # acquire the lock, set the output frame, and release the
-    	# lock
-        with lock:
-    	    outputFrame = frame.copy()
-'''		
 
 
 def generate():
