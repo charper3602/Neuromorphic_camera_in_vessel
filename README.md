@@ -1,3 +1,12 @@
+Documentation:
+
+Abel Sebastian: PCB videos showcasing the complete validation board and breadboard prototype are attached to this readme and labeled for your convenience. 
+
+Sohail Manayathara: Digital coded exposure code is in the "optics_code" folder labeled as the "dv_accumulator.py", the web streaming code is labeled under "webstreaming.py", simulated neuromorphic camera data is in the "videoFile" folder as an "output.mp4" prefix. 
+
+Chase Harper: The Window Forms program is in the "Decoder_app" branch and the relevant code portion for the decoding of the simulated data is under the "Form1.cs" in the "button5_Click()" function, the relevant test data used is under "textFile" folder as the "coordinates.txt" prefix, the file output videos are in the "videoFiles" folder as the "Coordinates_testing.mp4" prefix. 
+
+Disregard any files that do not open or are 2 bytes GitHub is glitching some of the files. 
 
 Here  is for Batch 1 BreadBoard 
 [![Watch the Short Video](https://img.youtube.com/vi/XOz2v1Za3MA/0.jpg)](https://youtube.com/shorts/XOz2v1Za3MA)
