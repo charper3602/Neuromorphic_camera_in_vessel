@@ -11,7 +11,7 @@ capture = dv.io.CameraCapture()
 capture.setDVSBiasSensitivity(dv.io.CameraCapture.BiasSensitivity.VeryLow)
 #g = open('coordfile.txt','w')
 
-frameC = 0
+eventBC = 0
 
 # Make sure the opened object supports event stream output, otherwise throw runtime error
 if not capture.isEventStreamAvailable():
@@ -51,11 +51,32 @@ def slicing_callback(events: dv.EventStore):
 
     #edge = cv.Canny(frame, 30,200)
     
+    #threshold the created frame
     ret,thresh = cv.threshold(frame,127,255,0)
+    #draw contours onto the thresholded image
     contours,hierarchy=cv.findContours(thresh,cv.RETR_TREE,cv.CHAIN_APPROX_NONE)
 
+    #initialize counter of contours and string variable to hold coordinates
+    cCount = 0
+    coordStr = ""
+
+    #loop to iterate over each contour
     for i in contours:
-        
+
+        #conditional statements that determine if max contour length has been exceeded
+        if (((cCount > 9) or (cCount == (len(contours) - 1))) and (coordStr != "")):
+            response = requests.post(url, json = {"coords":coordStr}, stream=True)
+            if response.status_code == 200:
+                print(response.status_code)
+                #response1 = requests.get('http://127.0.0.1:5000/api/coords/')
+                #dataR = response1.json()
+            else:
+                #print the response code if there was an error with posting
+                print(f'Error: {response.status_code}, {response.text}')
+            break
+        elif ((cCount > 9) or (cCount == (len(contours) - 1))):
+            break
+
         M = cv.moments(i)
         if M['m00'] != 0:
             
@@ -68,16 +89,10 @@ def slicing_callback(events: dv.EventStore):
 
             #g.write(str(frameC)+f" x:{cx} y:{cy}\n")
             #yield (str(frameC)+f" x:{cx} y:{cy}\n")
-            coordStr = str(frameC) + f" x:{cx} y:{cy}"
             
-
-            response = requests.post(url, json = {"coords":coordStr}, stream=True)
-            if response.status_code == 200:
-                print(response.status_code)
-                #response1 = requests.get('http://127.0.0.1:5000/api/coords/')
-                #dataR = response1.json()
-            else:
-                print(f'Error: {response.status_code}, {response.text}')
+            coordStr += (f"x:{cx} y:{cy} ")
+            
+        cCount += 1
                 
     
     #cv.imshow("Preview", frame.image)
@@ -100,7 +115,7 @@ while capture.isRunning():
     if events is not None:
         # If so, pass the events into the slicer to handle them
         slicer.accept(events)
-        frameC += 1
+        eventBC += 1
 
 cv.destroyAllWindows()
 #g.close()
