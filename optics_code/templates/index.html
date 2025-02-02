@@ -34,7 +34,12 @@ $.getJSON('http://127.0.0.1:5500/api/coords/', function(result) {       // 4
    var HTML = "<li>" + JSON.stringify(result) + "</li>";
    var obj =JSON.parse((JSON.stringify(result)));
    var keys= Object.values(obj);
-   document.getElementById("data_coords").innerHTML= JSON.stringify(keys);
+   for(var i=0;i<keys.length;i++){
+    var pars=JSON.stringify(keys[i]).split('"');
+   var keys2= pars[5];
+   document.getElementById("data_coords").innerHTML= document.getElementById("data_coords").innerHTML+ " "+ keys2 +"* ";
+   }
+  
    $("#culist").append(HTML);
 });
 
@@ -44,6 +49,7 @@ $.getJSON('http://127.0.0.1:5500/api/coords/', function(result) {       // 4
 $(document).ready(function() {                      // 1
  console.log("DEBUG: document ready");
  // Get first element for list
+ 
  requestUpdate();
  // Ensure list is updated every 3s
 // goPython(); 
@@ -109,8 +115,8 @@ $(document).ready(function() {                      // 1
     
   </div>
   <div>
-    <p id="data_coords" >hello1</p>
-    <p id="data_velocity" >hello2</p>
+    <p id="data_coords" >Coord Data:</p>
+    <p id="data_velocity" >Velocity Data:</p>
   </div>
   
 </div>
