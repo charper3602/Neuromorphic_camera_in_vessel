@@ -1,76 +1,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-   function draw(x,y) {
-   
-      //alert("working");
-      var canvas = document.getElementById("canvas1");
-            var ctx = canvas.getContext("2d");
-            ctx.fillRect(149+(x*2), 75+y, 2, 1);
-            let label= "10";
-            ctx.fillText(label, 147+(x*2), 74+y);
-            ctx.font = "10px Verdana";
-            label= "1";
-            ctx.fillRect(149+(x*2)+10, 75+y+10, 2, 1);
-            ctx.fillText(label, 147+(x*2)+10, 74+y+10);
-            ctx.font = "10px Verdana";
-   
-   }
-   function goPython(){
-            $.ajax({
-              url: "api.py",
-             context: document.body
-            }).done(function() {
-             alert('finished python script');;
-            });
-        }
-   function requestUpdate() {  
-                          // 3
-    draw(0,0);
-console.log("DEBUG: requesting update");
 
-$.getJSON('http://127.0.0.1:5500/api/coords/', function(result) {       // 4
-   console.log("DEBUG: Received " + JSON.stringify(result));
-   var HTML = "<li>" + JSON.stringify(result) + "</li>";
-   var obj =JSON.parse((JSON.stringify(result)));
-   var keys= Object.values(obj);
-   for(var i=0;i<keys.length;i++){
-    var pars=JSON.stringify(keys[i]).split('"');
-   var keys2= pars[5];
-   document.getElementById("data_coords").innerHTML= document.getElementById("data_coords").innerHTML+ " "+ keys2 +"* ";
-   }
-  
-   $("#culist").append(HTML);
-});
-
-}
-
-// This fires just once when the site initially loads
-$(document).ready(function() {                      // 1
- console.log("DEBUG: document ready");
- // Get first element for list
- 
- requestUpdate();
- // Ensure list is updated every 3s
-// goPython(); 
- setInterval(requestUpdate, 10);               // 2
-});
-
-
-
-  function autoRefresh() {
-    window.location = window.location.href;
-  let x=0;
-  let y=0;
-   
-          // draw(x,y);
-           
-        
-        }
-  
- // setInterval('autoRefresh()',20);
-  
-</script>
 <style>
   .outsideWrapper{ 
     width:500px; height:500px; 
@@ -115,12 +45,353 @@ $(document).ready(function() {                      // 1
     
   </div>
   <div>
-    <p id="data_coords" >Coord Data:</p>
+    <p id="data_coords" style="visibility: hidden;">Coord Data:</p>
+    <p id="data_coords_2" >Coord Data:</p>
     <p id="data_velocity" >Velocity Data:</p>
   </div>
   
 </div>
 
   </body>
- 
+  <script type="text/javascript">
+    var canvas1 = document.getElementById("canvas1");
+    var ctx1 = canvas1.getContext("2d");
+    ctx1.save();
+     function draw(x,y) {
+     
+        //alert("working");
+        var canvas = document.getElementById("canvas1");
+              var ctx = canvas.getContext("2d");
+              ctx.beginPath()
+              ctx.fillRect(149-(x*2), 75-y, 2, 1);
+             // let label= "10";
+             // ctx.fillText(label, 147+(x*2), 74+y);
+              //ctx.font = "10px Verdana";
+              //label= "1";
+              //ctx.fillRect(149+(x*2)+10, 75+y+10, 2, 1);
+              //ctx.fillText(label, 147+(x*2)+10, 74+y+10);
+              //ctx.font = "10px Verdana";
+     
+     }
+     function goPython(){
+              $.ajax({
+                url: "api.py",
+               context: document.body
+              }).done(function() {
+               alert('finished python script');;
+              });
+          }
+     function requestUpdate() {  
+                            // 3
+  //console.log("DEBUG: requesting update");
+  var count=0;
+  $.getJSON('http://127.0.0.1:5500/api/coords/', function(result) {       // 4
+     console.log("DEBUG: Received " + JSON.stringify(result));
+     var HTML = "<li>" + JSON.stringify(result) + "</li>";
+     if(JSON.stringify(result)=="[]"){
+          inter= document.getElementById("data_coords").innerHTML="None";
+          ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+        }
+     var inter="";
+     var coord_xy=[];
+     var obj =JSON.parse((JSON.stringify(result)));
+     document.getElementById("data_coords_2").innerHTML= JSON.stringify(result);
+     for(var [keys,values] of Object.entries(obj)){
+      var pars=JSON.stringify(values).split('*');
+      //for(var i=0;i<values.length;i++){
+        
+
+      if(pars.length==2){
+        document.getElementById("data_coords").innerHTML= pars[0].slice(18);
+       // alert(document.getElementById("data_coords").innerHTML);
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+      //  alert(coord_xy[0]+" "+coord_xy[1]);
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+       
+      }
+       
+      else if(pars.length==3){
+        document.getElementById("data_coords").innerHTML= pars[0].slice(18);
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+       // alert(coord_xy[0]+" "+coord_xy[1]);
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+        document.getElementById("data_coords").innerHTML= pars[1];
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+        //alert(coord_xy[0]+" "+coord_xy[1]);
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+  
+      }
+      else if(pars.length==4){
+        document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+        document.getElementById("data_coords").innerHTML=  pars[1];
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+       document.getElementById("data_coords").innerHTML=  pars[2].slice(0,-2);
+        inter= document.getElementById("data_coords").innerHTML;
+        coord_xy= inter.split(" ");
+        draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      }
+      else if(pars.length==5){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    }
+    else if(pars.length==6){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[5].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    }
+    else if(pars.length==7){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML= pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[5];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[6].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    }
+    else if(pars.length==8){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[5];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[6];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[7].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    }
+    else if(pars.length==9){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[5];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[6];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[7];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[8].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    }
+    else if(pars.length==10){
+      document.getElementById("data_coords").innerHTML=  pars[0].slice(18);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[1];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[2];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[3];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[4];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[5];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[6];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[7];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[8];
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+      document.getElementById("data_coords").innerHTML=  pars[9].slice(0,-2);
+      inter= document.getElementById("data_coords").innerHTML;
+      coord_xy= inter.split(" ");
+      draw(Math.ceil(parseInt(coord_xy[0])/10),Math.ceil(parseInt(coord_xy[1])/10));
+    
+    }
+      
+     // }
+      
+  count=1;
+      //console.log(Object.entries(obj));
+     };
+     //for(var i=0;i<keys.length;i++){
+      //var pars=keys[i].split('*');
+      
+       
+     // for(var j=0;j<pars[i].length;j++){
+       // var coord_xy_2=(pars[i][j].toString()).split(" ");
+      //       document.getElementById("data_coords").innerHTML= coord_xy_2[j] ; 
+          //   draw(parseInt(coord_xy_2[0])/3,parseInt(coord_xy_2[0])/3);
+      //}
+  
+     //var keys2= pars[5];
+     //var coords_xy= keys2.split("*");
+     //coords_xy.pop();
+     //if(coords_xy.length>0){
+  
+     
+    // coords_xy_string=coords_xy;
+   // for(var j=0;j<coords_xy_string;j++){
+        //     
+     //}
+  
+     
+    
+  
+     
+    
+     $("#culist").append(HTML);
+  });
+     }
+     
+  // This fires just once when the site initially loads
+  $(document).ready(function() {                      // 1
+   console.log("DEBUG: document ready");
+   // Get first element for list
+   
+   requestUpdate();
+   
+   // Ensure list is updated every 3s
+  // goPython(); 
+   setInterval(requestUpdate, 10);               // 2
+  });
+  
+  
+  
+    function autoRefresh() {
+      window.location = window.location.href;
+    let x=0;
+    let y=0;
+     
+            // draw(x,y);
+             
+          
+          }
+    
+   // setInterval('autoRefresh()',20);
+    
+  </script>
 </html>
