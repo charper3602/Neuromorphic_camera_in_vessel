@@ -111,7 +111,7 @@ for i in range(resolution[0]):
     for j in range(resolution[1]): 
         if ((polShifts[j][i] != 0)): #and (pCount[j][i] == nCount[j][i])
             #fMap[j][i] = 1/(pCount[j][i] * 0.05)
-            fMap[j][i] = 1/(((frameCount * 50)/(polShifts[j][i]+1))*0.001)
+            fMap[j][i] = 1/(((frameCount * 50)/(polShifts[j][i]+1))*0.001)    #main frequency calculation
 
 #plot the frequency map using a simple function
 plt.imshow(fMap,cmap='hot',interpolation='nearest')
