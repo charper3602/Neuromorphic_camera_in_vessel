@@ -17,6 +17,7 @@ from threading import Thread
 import threading
 from multiprocessing import Pool
 import multiprocessing
+from joblib import Parallel, delayed
 #pool = Pool(10) # on 8 processors
 # Initiate the client connection to the same port and localhost loopback address
 input=input("Data Mode Y or N: ")
@@ -359,14 +360,23 @@ def show_preview(events: dv.EventStore): #PCA function
         # Draw each contour only for visualisation purposes
         coord_detect=getOrientation(c)[1] #coordinates for that frame
         font = cv.FONT_HERSHEY_SIMPLEX
+        
         cv.putText(frame,f"Coordinate Plot",(250,30), font, .5,(0,0,0),1,cv.LINE_AA)
-        #if __name__ == '__main__':
-           #  with multiprocessing.Pool(processes=3) as pool:
+        
 
-        for h in range(10):
-            results = task(h,coord_detect,frame,input,LED_array)
-            LED_array=results[0]
-            frame=results[1]
+        results = Parallel(n_jobs=5)(delayed(task)(h,coord_detect,frame,input,LED_array) for h in range(10)) #parallelizes the loop but its delayed by 3-10s vs 2-3s for the normal 
+        LED_array=results[0][0]
+        frame=results[0][1]
+        #if __name__ == '__main__':
+          
+          #with multiprocessing.Pool(processes=10) as pool:
+                 # results = pool.starmap(task, ((h,coord_detect,frame,input,LED_array) for h in range(10)))
+                  
+                 # pool.terminate()
+        #for h in range(10):
+         #   results = task(h,coord_detect,frame,input,LED_array)
+         #   LED_array=results[0]
+         #   frame=results[1]
     if(input=="Y"or input=="y"): #displaying code outside the main function for each frame
             for j in range(10):
                 if((LED_array[j].failure1>0)and(LED_array[j].failure2>0)):
