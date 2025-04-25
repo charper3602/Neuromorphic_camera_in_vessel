@@ -18,7 +18,6 @@ import threading
 from multiprocessing import Pool
 import multiprocessing
 import pyinputplus as pyip
-#pool = Pool(10) # on 8 processors
 # Initiate the client connection to the same port and localhost loopback address
 input=input("Data Mode Y or N: ")
 sample = pyip.inputInt(
@@ -47,52 +46,17 @@ visualizer.setBackgroundColor(dv.visualization.colors.white())
 visualizer.setPositiveColor(dv.visualization.colors.iniBlue())
 visualizer.setNegativeColor(dv.visualization.colors.darkGrey())
 
-''' classes for multithreading(not used)
-class readVisualizer:   #object to continuously read visualizer frames
-     def __init__(self,evs):
-          self.evs = evs if evs is not None else dv.EventStore()
-          self.frame = None
-          self.stopped = False
-     def setEvs(self,evnts):
-          self.evs = evnts
-     def start(self):
-          Thread(target=self.get, args=()).start()
-          return self
-     def get(self):
-          while not self.stopped:
-               self.frame = visualizer.generateImage(self.evs)
-     def stop(self):
-          self.stopped = True
-
-class showVisualizer:   #object to continuously show visualizer frames
-     def __init__(self, frame = None):
-          self.frame = frame
-          self.stopped = False
-    
-     def start(self):
-          Thread(target=self.show, args=()).start()
-          return self
-     def show(self):
-          while not self.stopped:
-               if self.frame is not None:
-                cv.imshow("Output", self.frame)
-               if cv.waitKey(1) == ord("q"):
-                    self.stopped = True
-     def stop(self):
-          self.stopped = True
-'''
-
 class tracker(): #object to do the calculations
   def __init__(self,vel,ind,success1,success2,success3,success4,success5,success6,success7,success8,success9,success10,
                failure1,failure2,failure3,failure4,failure5,failure6,failure7,failure8,failure9,failure10,
                text_code,count_array,max_freq,coordpresent,coordpast,ind2,coordx_array,coordy_array,
                calculated_text,successrate1_text,successrate2_text,running1_text,running2_text,freq_text,textpresent,successCount):
-    self.vel = vel if vel is not None else (0.0,0.0)
-    self.ind = ind if ind is not None else False
-    self.ind2 = ind2 if ind2 is not None else False
-    self.max_freq = max_freq if max_freq is not None else 0.0
-    self.success1 = success1 if success1 is not None else 0.0
-    self.success2 = success2 if success2 is not None else 0.0 #Tell the initalizer to assign a default value to both mutable and imutable variables 
+    self.vel = vel if vel is not None else (0.0,0.0)     #stores velocity
+    self.ind = ind if ind is not None else False     #indicator variable
+    self.ind2 = ind2 if ind2 is not None else False     #indicator variable
+    self.max_freq = max_freq if max_freq is not None else 0.0     #max frequency variable
+    self.success1 = success1 if success1 is not None else 0.0     #success & failure counters(1 to 10)
+    self.success2 = success2 if success2 is not None else 0.0     #Tell the initalizer to assign a default value to both mutable and imutable variables 
     self.failure1 = failure1 if failure1 is not None else 0.0
     self.failure2 = failure2 if failure2 is not None else 0.0
     self.success3 = success3 if success3 is not None else 0.0
@@ -112,11 +76,11 @@ class tracker(): #object to do the calculations
     self.failure9 = failure9 if failure9 is not None else 0.0
     self.failure10 = failure10 if failure10 is not None else 0.0
 
-    self.text_code = text_code if text_code is not None else ""
+    self.text_code = text_code if text_code is not None else ""     
     self.count_array = count_array if count_array is not None else [(0.0,0.0)]
     self.coordpresent= coordpresent if coordpresent is not None else (0.0,0.0)
     self.coordpast= coordpast if coordpast is not None else (0.0,0.0)
-    self.coordx_array = coordx_array if coordx_array is not None else [0]
+    self.coordx_array = coordx_array if coordx_array is not None else [0]     #stores x and y coordinates of events
     self.coordy_array = coordy_array if coordy_array is not None else [0]
     self.calcuated_text=calculated_text if calculated_text is not None else ""
     self.successrate1_text=successrate1_text if successrate1_text is not None else ""
