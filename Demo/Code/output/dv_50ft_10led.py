@@ -222,7 +222,7 @@ class tracker(): #object to do the calculations
             return self #outputs your count array to be used in the next frame
   def rate(self): #handle changes to error rate and calcuate the codes give the freqencies
             #pattern1
-            if((np.abs(self.max_freq)>=2.0)and(np.abs(self.max_freq)<=2.9)): #find if the LED is outputing a 1
+            if((np.abs(self.max_freq)>=2.0)and(np.abs(self.max_freq)<=2.9)): #frequency range for pattern 1
                 self.text_code=self.text_code+"1"
                 self.success1=self.success1+1
             else:
@@ -230,63 +230,63 @@ class tracker(): #object to do the calculations
                 #print(f"{self.success1}")    
             
             #pattern2
-            if((np.abs(self.max_freq)>=3.0)and(np.abs(self.max_freq)<=3.6)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=3.0)and(np.abs(self.max_freq)<=3.6)):#frequency range for pattern 2
                 self.text_code=self.text_code+"0"
                 self.success2=self.success2+1
             else:
                 self.failure2=self.failure2+1   
             
             #pattern3
-            if((np.abs(self.max_freq)>=3.6)and(np.abs(self.max_freq)<=4.0)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=3.6)and(np.abs(self.max_freq)<=4.0)):#frequency range for pattern 3
                 self.text_code=self.text_code+"0"
                 self.success3=self.success3+1
             else:
                 self.failure3=self.failure3+1   
             
             #pattern4
-            if((np.abs(self.max_freq)>=3.5)and(np.abs(self.max_freq)<=3.9)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=3.5)and(np.abs(self.max_freq)<=3.9)):#frequency range for pattern 4
                 self.text_code=self.text_code+"0"
                 self.success4=self.success4+1
             else:
                 self.failure4=self.failure4+1   
             
             #pattern5
-            if((np.abs(self.max_freq)>=4.2)and(np.abs(self.max_freq)<=5.0)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=4.2)and(np.abs(self.max_freq)<=5.0)):#frequency range for pattern 5
                 self.text_code=self.text_code+"0"
                 self.success5=self.success5+1
             else:
                 self.failure5=self.failure5+1   
             
             #pattern6
-            if((np.abs(self.max_freq)>5.0)and(np.abs(self.max_freq)<=6.5)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>5.0)and(np.abs(self.max_freq)<=6.5)):#frequency range for pattern 6
                 self.text_code=self.text_code+"0"
                 self.success6=self.success6+1
             else:
                 self.failure6=self.failure6+1   
             
             #pattern7
-            if((np.abs(self.max_freq)>=6.5)and(np.abs(self.max_freq)<=7.0)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=6.5)and(np.abs(self.max_freq)<=7.0)):#frequency range for pattern 7
                 self.text_code=self.text_code+"0"
                 self.success7=self.success7+1
             else:
                 self.failure7=self.failure7+1   
     
             #pattern8
-            if((np.abs(self.max_freq)>7.0)and(np.abs(self.max_freq)<=10.1)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>7.0)and(np.abs(self.max_freq)<=10.1)):#frequency range for pattern 8
                 self.text_code=self.text_code+"0"
                 self.success8=self.success8+1
             else:
                 self.failure8=self.failure8+1   
             
             #pattern9
-            if((np.abs(self.max_freq)>10.1)and(np.abs(self.max_freq)<=10.7)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>10.1)and(np.abs(self.max_freq)<=10.7)):#frequency range for pattern 9
                 self.text_code=self.text_code+"0"
                 self.success9=self.success9+1
             else:
                 self.failure9=self.failure9+1  
 
             #pattern10
-            if((np.abs(self.max_freq)>=11)and(np.abs(self.max_freq)<=11.9)):#find if the LED is outputing a 0
+            if((np.abs(self.max_freq)>=11)and(np.abs(self.max_freq)<=11.9)):#frequency range for pattern 10
                 self.text_code=self.text_code+"0"
                 self.success10=self.success10+1
             else:
