@@ -22,7 +22,7 @@ server = dv.io.NetworkWriter("127.0.0.1", 5500, stream)
 print("Waiting for connections...")
 
 # Stream interval defines the packet frequency for this sample
-streamInterval = timedelta(milliseconds=18)
+streamInterval = timedelta(milliseconds=33)
 
 
 
@@ -80,7 +80,7 @@ while True:
 
 
         # Register callback to be performed every 33 milliseconds
-        slicer.doEveryTimeInterval(timedelta(milliseconds=18), slicing_callback)
+        slicer.doEveryTimeInterval(timedelta(milliseconds=33), slicing_callback)
 
         # Run the event processing while the camera is connected
         while capture.isRunning():
