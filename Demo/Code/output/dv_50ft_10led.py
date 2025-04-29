@@ -348,9 +348,11 @@ def task(h,coord_detect,frame,input,LED_array=tracker(None,None,None,None,None,N
                   (LED_array[h]).rate()#output the text
                   (LED_array[h]).frq(30,sample) #display the pixel count and preform transform to get frq
                 LED_array[h].calcuated_text= LED_array[h].calcuated_text+LED_array[h].text_code
+               #calculate velocities
                 velX = round(((LED_array[h].coordpresent[1]-LED_array[h].coordpast[1])*(velConv)),3)
                 velY = round(((LED_array[h].coordpresent[0]-LED_array[h].coordpast[0])*(velConv)),3)
-                if((LED_array[h].success1>10)):#(LED_array[h].success1/(LED_array[h].failure1+LED_array[h].success1)>.5)and((LED_array[h].success2/(LED_array[h].failure2+LED_array[h].success2)<.10))):#check if its a valid code
+               #check success rates to see if its a valid code
+                if((LED_array[h].success1>10)):#(LED_array[h].success1/(LED_array[h].failure1+LED_array[h].success1)>.5)and((LED_array[h].success2/(LED_array[h].failure2+LED_array[h].success2)<.10))):
                       #print("working")
                       LED_array[h].vel=(velX,velY)  
                       cv.putText(frame,f"ID:{1} X:{round((LED_array[h].coordpresent[1]*pxToFt),3)}, Y:{round((LED_array[h].coordpresent[0]*pxToFt),3)}",(LED_array[h].coordpresent[0]+20,LED_array[h].coordpresent[1]), font, .5,(0,0,0),1,cv.LINE_AA)
@@ -435,15 +437,11 @@ def task(h,coord_detect,frame,input,LED_array=tracker(None,None,None,None,None,N
                LED_array[h].coordpast=LED_array[h].coordpresent
                LED_array[h].coordpresent=coord_detect #populate the current coords
                
-         '''
-         else:
-              LED_array[h].successCount -= 1
-              LED_array[h].ind=False
-         '''
+       
          #print(LED_array[h].successCount)
          
          return LED_array,frame #return the array for the next frame
-            
+#initialize 10 LED tracker objects            
 LED1= tracker(None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None)
 LED2= tracker(None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None)
 LED3= tracker(None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None)
@@ -472,7 +470,7 @@ def show_preview(events: dv.EventStore): #PCA function
     global counter#, visGetter
     #visGetter.setEvs(events)
     frame = visualizer.generateImage(events)
-    def drawAxis(img, p_, q_, colour, scale):
+    def drawAxis(img, p_, q_, colour, scale): #draws PCA axes
             p = list(p_)
             q = list(q_)
             
