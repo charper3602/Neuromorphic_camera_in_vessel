@@ -9,7 +9,7 @@ Chase Harper: The Window Forms program is in the "Decoder_app" branch and the re
 Disregard any files that do not open or are 2 bytes GitHub is glitching some of the files. 
 
 404 Demo Videos:
-
+For operation of the code, choose a sampling rate (33ms default unless you change the dv_streaming.py file sampling rate), the sample area (default 40 for the correct focal length lens), and initialization frames (default 100 for smooth graphs).
 1 LED Outside View:
 https://vimeo.com/1078174891?share=copy#t=0
 
