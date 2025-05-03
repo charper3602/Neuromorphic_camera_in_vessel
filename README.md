@@ -1,5 +1,5 @@
 Documentation:
-Please visit the "Demo" channel for the demo code/results.
+Please visit the "Demo" branch for the demo code/results for both 403 and 404.
 Abel Sebastian: PCB videos showcasing the complete validation board and breadboard prototype are attached to this readme and labeled for your convenience. 
 
 Sohail Manayathara: Digital coded exposure code is in the "optics_code" folder labeled as the "dv_accumulator.py", the web streaming code is labeled under "webstreaming.py", simulated neuromorphic camera data is in the "videoFile" folder as an "output.mp4" prefix. 
