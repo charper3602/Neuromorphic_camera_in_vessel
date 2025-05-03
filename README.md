@@ -1,10 +1,12 @@
 Documentation:
 
-Abel Sebastian: PCB videos showcasing the complete validation board and breadboard prototype are attached to this readme and labeled for your convenience. 
+Abel Sebastian: PCB code showcasing the complete validation boards and array board is attached as image files in the "Demo" folder as "Setup_1.jpg","Setup_2.jpg" , and "10_setup.jpg", and the various "Frequency_#HZ_triangular_PWM_Blinking.c".
 
-Sohail Manayathara: Digital coded exposure code is in the "optics_code" folder labeled as the "dv_accumulator.py", the web streaming code is labeled under "webstreaming.py", simulated neuromorphic camera data is in the "videoFile" folder as an "output.mp4" prefix. 
+Sohail Manayathara: Digital coded exposure code under the "Demo" folder is contained as the event visualizer in "dv_streaming.py".
 
-Chase Harper: The Window Forms program is in the "Decoder_app" branch and the relevant code portion for the decoding of the simulated data is under the "Form1.cs" in the "button5_Click()" function, the relevant test data used is under "textFile" folder as the "coordinates.txt" prefix, the file output videos are in the "videoFiles" folder as the "Coordinates_testing.mp4" prefix. 
+Chase Harper: The Python code output under the "Demo" folder contained as the "dv_50ft_10led.py" file, with the "dv_streaming.py" necessary to stream the output.
+
+The entire system as a whole is validated under "404 Demo Videos" as a series of videos showing the system in various dark airgapped conditions, testing the features, and gathering data.
 
 Disregard any files that do not open or are 2 bytes GitHub is glitching some of the files. 
 
